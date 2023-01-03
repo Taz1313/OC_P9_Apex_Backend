@@ -71,16 +71,16 @@ public class OrderTriggerHandlerTest {
     
     @isTest
     private static void updateAccountCAWithOrderTest() {
-        // Créer un compte et une liste de commandes associées
+        // Crée un compte et une liste de commandes associées
         List<Account> accounts = TestDataFactory.createAccounts(1);
         List<Order> orders = TestDataFactory.createOrdersForAccounts(accounts, 1, 100, 1);
 
-        // Mettre à jour la liste de commandes pour déclencher le déclencheur UpdateAccountCA
+        // Met à jour la liste de commandes pour déclencher le trigger
         Test.startTest();
         update orders;
         Test.stopTest();
         
-        // Vérifier que le champ Chiffre_d_affaire__c du compte a été mis à jour correctement
+        // Vérifie que le champ Chiffre_d_affaire__c du compte a été mis à jour correctement
         Account updatedAccount = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id = :accounts[0].Id AND Name = :accounts[0].Name];
         Decimal expectedCA = 0;
         for (Order order : orders){
@@ -92,16 +92,16 @@ public class OrderTriggerHandlerTest {
     
         @isTest
     private static void updateAccountCATestWithNoOrderTest() {
-        // Créer un compte et une liste de commandes associées
+        // Crée un compte et une liste de commandes associées
         List<Account> accounts = TestDataFactory.createAccounts(1);
         List<Order> orders = TestDataFactory.createOrdersForAccounts(accounts, 0, 0, 0);
 
-        // Mettre à jour la liste de commandes pour déclencher le déclencheur UpdateAccountCA
+        // Met à jour la liste de commandes pour déclencher le déclencheur UpdateAccountCA
         Test.startTest();
         update orders;
         Test.stopTest();
         
-        // Vérifier que le champ Chiffre_d_affaire__c du compte a été mis à jour correctement
+        // Vérifie que le champ Chiffre_d_affaire__c du compte a été mis à jour correctement
         Account updatedAccount = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id = :accounts[0].Id AND Name = :accounts[0].Name];
         Decimal expectedCA = null;
         for (Order order : orders){

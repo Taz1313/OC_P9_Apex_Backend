@@ -16,12 +16,12 @@ public class OrderTriggerHandler {
             
             // On parcourt cette liste de comptes
             for(Account acc : listAccount){
-                // Vérifiez que Chiffre_d_affaire__c et le montant total des commandes associées sont non nulls avant de les utiliser
+                // Vérifie que Chiffre_d_affaire__c et le montant total des commandes associées sont non nulls
                 if (acc.Chiffre_d_affaire__c != null && mapAccountAmount.get(acc.Id) != null) {
-                    // Ajoutez le montant total des commandes associées au chiffre d'affaire du compte
+                    // Ajoute le montant total des commandes associées au chiffre d'affaire du compte
                     acc.Chiffre_d_affaire__c = acc.Chiffre_d_affaire__c + mapAccountAmount.get(acc.Id);
                 } else if (mapAccountAmount.get(acc.Id) != null) {
-                    // Si Chiffre_d_affaire__c est null, affectez-lui la valeur du montant total des commandes associées
+                    // Si Chiffre_d_affaire__c est null, affecte la valeur du montant total des commandes associées
                     acc.Chiffre_d_affaire__c = mapAccountAmount.get(acc.Id);
                 }
             }
@@ -35,7 +35,7 @@ public class OrderTriggerHandler {
     public static void calculateAmount(List<Order> newOrders) {
         for (Order newOrder : newOrders) {
             
-            // Vérifiez que TotalAmount et ShipmentCost__c sont des valeurs non null avant de les utiliser
+            // Vérifie que TotalAmount et ShipmentCost__c sont des valeurs non
             if (newOrder.ShipmentCost__c != null) {
                 // Calcul le montant net en soustrayant le coût d'expédition au montant total de la commande
                 newOrder.NetAmount__c = newOrder.TotalAmount - newOrder.ShipmentCost__c;
