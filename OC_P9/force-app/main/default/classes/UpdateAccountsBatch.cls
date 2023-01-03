@@ -1,4 +1,4 @@
-global class UpdateAccounts implements Database.Batchable<sObject> {
+global class UpdateAccountsBatch implements Database.Batchable<sObject> {
     
     // Méthode qui retourne la liste des comptes qui ont au moins une commande en statut "Ordered"
     global Database.QueryLocator start(Database.BatchableContext info) { 

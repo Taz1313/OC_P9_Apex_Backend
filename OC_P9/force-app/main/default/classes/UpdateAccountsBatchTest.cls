@@ -1,5 +1,5 @@
 @isTest
-public class UpdateAccountsTest {
+public class UpdateAccountsBatchTest {
     
     @isTest
     static void createOrdersTest() {
