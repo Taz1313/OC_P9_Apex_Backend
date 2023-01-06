@@ -19,7 +19,7 @@ public class OrderTriggerHandler {
                 // Vérifie que Chiffre_d_affaire__c et le montant total des commandes associées sont non nulls
                 if (acc.Chiffre_d_affaire__c != null && mapAccountAmount.get(acc.Id) != null) {
                     // Ajoute le montant total des commandes associées au chiffre d'affaire du compte
-                    acc.Chiffre_d_affaire__c = acc.Chiffre_d_affaire__c + mapAccountAmount.get(acc.Id);
+                    acc.Chiffre_d_affaire__c = mapAccountAmount.get(acc.Id);
                 } else if (mapAccountAmount.get(acc.Id) != null) {
                     // Si Chiffre_d_affaire__c est null, affecte la valeur du montant total des commandes associées
                     acc.Chiffre_d_affaire__c = mapAccountAmount.get(acc.Id);
