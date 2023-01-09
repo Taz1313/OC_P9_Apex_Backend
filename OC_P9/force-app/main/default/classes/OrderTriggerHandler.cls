@@ -1,36 +1,22 @@
 public class OrderTriggerHandler {
     
-    public static void updateAccountCA(List<Order> newOrders) {
-            // Création d'un map qui va stocker les Id des comptes et le montant total des commandes associées
-            Map<Id, Decimal> mapAccountAmount = new Map<Id, Decimal>();
+    public static void updateAccountCA(List<Id> accountsId) {
+        // Récupération de la liste des comptes avec leurs commandes en statut 'Ordered'            
+        List<Account> accounts = [SELECT Id, Chiffre_d_affaire__c, (SELECT Id, AccountId, TotalAmount FROM Orders WHERE Status = 'Ordered') FROM Account WHERE Id IN : accountsId];
         
-            // On parcourt les commandes mises à jour
-            for(Order ord : newOrders) {
-                // On ajoute l'Id du compte et le montant total de la commande dans le map
-                if (ord.TotalAmount != null && ord.AccountId != null) {
-                    mapAccountAmount.put(ord.AccountId, ord.TotalAmount);
-                }
-            }
-            // On récupère la liste des comptes dont l'Id est présent dans le map
-            List<Account> listAccount = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN :mapAccountAmount.keySet() ];
-            
-            // On parcourt cette liste de comptes
-            for(Account acc : listAccount){
-                // Vérifie que Chiffre_d_affaire__c et le montant total des commandes associées sont non nulls
-                if (acc.Chiffre_d_affaire__c != null && mapAccountAmount.get(acc.Id) != null) {
-                    // Ajoute le montant total des commandes associées au chiffre d'affaire du compte
-                    acc.Chiffre_d_affaire__c = mapAccountAmount.get(acc.Id);
-                } else if (mapAccountAmount.get(acc.Id) != null) {
-                    // Si Chiffre_d_affaire__c est null, affecte la valeur du montant total des commandes associées
-                    acc.Chiffre_d_affaire__c = mapAccountAmount.get(acc.Id);
-                }
-            }
+        // Pour chaque compte avec une commande en statut 'Ordered', affectation du chiffre d'affaires au compte en ajoutant le TotalAmount
+        for(Account accountUpdate : accounts){
+            Decimal accountCA = 0;
 
-            // On met à jour la liste de comptes dans la base de données
-            update listAccount;
+            for(Order orders : accountUpdate.orders) {
+                if (orders.TotalAmount != null) {
+                    accountCA = accountCA + orders.TotalAmount;
+                }
+            }
+            accountUpdate.Chiffre_d_affaire__c = accountCA;
+        }
+        update accounts;
 	}
-    
-        
     
     public static void calculateAmount(List<Order> newOrders) {
         for (Order newOrder : newOrders) {
